@@ -374,7 +374,7 @@
 					isPage: true, //是否有分页
 					currentPage: 1, //当前页
 					total: 0, //总条数
-					pageSize: settings.pageSizes[0], //每条页数
+					pageSize: 10, //每条页数
 				},
 				// -------非挂靠利率修改弹窗
 				addContentOne: {
@@ -846,27 +846,11 @@
 		},
 		computed: {
 			size() {
-				return this.$store.state.settings.size;
+				return 10;
 			},
 		},
 		created() {
 			this.refreshTable();
-			// 法人代码
-			this.getEnumInfoForXj("CD002700");
-			// 币种代码
-			this.getEnumInfoForXj("CD2020091804");
-			//利率单位类型
-			this.getEnumInfoForXj("CD2020091807");
-			//定价机构类型
-			this.getEnumInfoForXj("CD2020091806");
-			// 利率期限
-			this.getEnumInfoForXj("CD2020091805");
-			// 浮动类型
-			this.getEnumInfoForXj("CD2020091808");
-			// 浮动调整方向
-			this.getEnumInfoForXj("CD2020091812");
-			// 浮动上下限类型代码
-			this.getEnumInfoForXj("CD2020091809");
 		},
 		methods: {
 			// 非挂靠利率修改弹框确认 取消
@@ -1025,7 +1009,6 @@
 						});
 						// 回填当前行的值
 						Object.assign(this.addContentOne.searchData, row);
-						QryRateExecInf(this.addContentOne.searchData).then((res) => {});
 						this.addContentOne.isShow = true;
 					} else if (row.afldFlag === "1") {
 						// 清空表单原有值
@@ -1035,7 +1018,6 @@
 						// 回填当前行的值
 						Object.assign(this.addContentTwo.searchData, row);
 						this.addContentTwo.searchData.flotDirect = row.adjTpCode;
-						QryRateExecInf(this.addContentTwo.searchData).then((res) => {});
 						this.addContentTwo.isShow = true;
 					}
 				} else if (operate.key === 1) {
@@ -1083,14 +1065,6 @@
 				};
 
 				this.tableData.loading = true;
-				QryRateExecInf(params).then((res) => {
-					this.tableData.loading = false;
-					let flag = res.Header && res.Header.RetStatus;
-					if (flag === "S") {
-						this.tableData.tableData = res.rateExecList;
-						this.tableData.total = res.totalNum;
-					}
-				});
 			},
 			// 新增 修改弹框的确定取消
 			tableVisibleHandle(val) {
